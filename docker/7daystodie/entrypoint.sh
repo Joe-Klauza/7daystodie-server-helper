@@ -61,7 +61,7 @@ if [ -n "$SEVENDAYSTODIE_BOT_TOKEN" ]; then
       export BOT_LAST_EXIT_CODE=$?
       log "7DaysToDie Bot Stopped"
       if [[ $BOT_LAST_EXIT_CODE -eq 43 ]]; then
-        break # Contner is stopping; bail out
+        break # Container is stopping; bail out
       elif [[ $BOT_LAST_EXIT_CODE -ne 42 ]]; then
         log "Restarting in 5 seconds"
         sleep 5

@@ -42,7 +42,7 @@ end
 
 def log_command_event(event)
     $logger.info("#{event.user.name}##{event.user.discriminator} (#{event.user.id}) triggered command #{event.command_name} -> #{event.subcommand} #{' ' + event.options.to_s unless event.options.empty?}")
-    send_to_admin_channel("<@#{event.user.id}> (`#{event.user.name}##{event.user.discriminator}`) triggered command `#{event.command_name} -> #{event.subcommand}#{' ' + event.options.to_s unless event.options.empty?}`")
+    send_to_admin_channel("<@#{event.user.id}> (`#{event.user.name}##{event.user.discriminator}`) triggered command `/#{event.command_name} #{event.subcommand}#{' ' + event.options.map { |k,v| "#{k}: #{v}" }.join(' ') unless event.options.empty?}`")
 end
 
 def system_no_out(command)
@@ -190,7 +190,7 @@ admin_command(:'7daystodie', :rcon) do |event|
         response = "```\n#{response}\n```"
         event.edit_response(content: "Receiving response!")
         split_message(response).each do |m|
-            send_to_admin_channel(m) unless event.channel.id == $sevendays_admin_channel_id
+            send_to_admin_channel(m)
             event.send_message(content: m, ephemeral: true)
         end
     end
@@ -215,7 +215,7 @@ admin_command(:'7daystodie', :restart) do |event|
 end
 
 admin_command(:'7daystodie', :restart_bot) do |event|
-    send_to_channel("<@#{event.user.id}> is restarting me...")
+    send_to_admin_channel("<@#{event.user.id}> is restarting me...")
     event.send_message(content: "Exiting!")
     exit 42
 end
@@ -250,7 +250,7 @@ begin
         $logger.info('7DaysToDie Bot stopped')
     end
     if ENV['BOT_LAST_EXIT_CODE'] == '42'
-        send_to_channel("I'm back! :wave:")
+        send_to_admin_channel("I'm back! :wave:")
     end
     sleep
 rescue SignalException => e
