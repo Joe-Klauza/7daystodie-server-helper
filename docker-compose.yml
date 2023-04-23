@@ -1,0 +1,31 @@
+version: "3"
+services:
+  7daystodie:
+    build:
+      context: .
+      dockerfile: docker/7daystodie/Dockerfile
+    environment:
+      # Optional Discord bot integration
+      # https://discord.com/developers/applications
+      # https://discord.com/oauth2/authorize?client_id=YOUR_BOT_CLIENT_ID_HERE&scope=bot
+      SEVENDAYSTODIE_BOT_TOKEN:
+      # The below channel is used for logging all actions for admin review/auditing
+      SEVENDAYSTODIE_BOT_ADMIN_CHANNEL_ID:
+      # The below channel is used for logging public actions (e.g. when someone restarts the server)
+      SEVENDAYSTODIE_BOT_CHANNEL_ID:
+      # Those with the below role can restart the server and the bot via the bot
+      SEVENDAYSTODIE_BOT_ADMIN_ROLE_ID:
+      # Those with the below role can update 7daystodie-server-helper via the bot
+      SEVENDAYSTODIE_BOT_OWNER_ROLE_ID:
+    ports:
+      # Game / Query
+      - 26900:26900/tcp
+      - 26900:26900/udp
+      - 26902:26902/udp
+      # RCON is not here because telnet is not secure. Use the Discord bot to access RCON remotely for security.
+    volumes:
+      - ./volumes/steam:/home/7daystodie/.steam:z
+      - ./volumes/saves:/home/7daystodie/.local/share/7DaysToDie/:z
+      - ./volumes/server:/home/7daystodie/7daystodie:z
+      - ./volumes/rbenv:/home/7daystodie/.rbenv:z
+      - ./7daystodie-bot:/home/7daystodie/7daystodie-bot:z
