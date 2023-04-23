@@ -233,6 +233,7 @@ begin
                 info = ServerQuery::a2s_info(ip, port) || info
                 players = ServerQuery::a2s_player(ip, port) || players
                 rules = ServerQuery::a2s_rules(ip, port) || rules
+                $bot.update_status(nil, ": #{info[:current_players] || '?'}", nil)
                 sleep 10
             rescue => e
                 $logger.warn(e)
