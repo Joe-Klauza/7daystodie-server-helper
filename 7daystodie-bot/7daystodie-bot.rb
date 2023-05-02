@@ -99,7 +99,7 @@ def admin_command(cmd, subcmd, ephemeral: true)
         event.defer(ephemeral: ephemeral)
         log_command_event(event)
         unless user_is_admin?(event.user)
-            send_to_admin_channel(":warning: Non-admin user <@#{event.user.id}> (`#{event.user.name}##{event.user.discriminator}`) was denied trying to trigger admin command `#{event.command_name} -> #{event.subcommand}`")
+            send_to_admin_channel(":warning: Non-admin user <@#{event.user.id}> (`#{event.user.name}##{event.user.discriminator}`) was denied trying to trigger admin command `/#{event.command_name} #{event.subcommand}#{' ' + event.options.map { |k,v| "#{k}: #{v}" }.join(' ') unless event.options.empty?}`")
             next event.send_message(content: 'You are not an admin! :newspaper2:')
         end
         yield event
@@ -234,9 +234,10 @@ begin
                 players = ServerQuery::a2s_player(ip, port) || players
                 rules = ServerQuery::a2s_rules(ip, port) || rules
                 $bot.update_status(nil, ": #{info[:current_players] || '?'}", nil)
-                sleep 10
             rescue => e
                 $logger.warn(e)
+            ensure
+                sleep 10
             end
         end
     end

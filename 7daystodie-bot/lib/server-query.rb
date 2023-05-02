@@ -129,17 +129,17 @@ class ServerQuery
         rules = data.each_slice(2).to_h
         rules
         rescue NoUDPResponseError => e
-        log "[#{server_ip}:#{server_port}] Couldn't get UDP response (#{e.class} raised)", level: :warn
+        logger.warn "[#{server_ip}:#{server_port}] Couldn't get UDP response (#{e.class} raised)"
         nil
     rescue => e
-        log "[#{server_ip}:#{server_port}] Rescued error while querying rules: #{resp.inspect}", e, level: :warn
+        logger.warn "[#{server_ip}:#{server_port}] Rescued error while querying rules: #{resp.inspect}", e
         nil
     end
 end
 
 if __FILE__ == $0
-    ip = '127.0.0.1'
-    port = '26900'
+    ip = ARGV[0]
+    port = ARGV[1]
     puts 'INFO: ' + ServerQuery::a2s_info(ip, port).inspect
     puts 'PLAYERS: ' + ServerQuery::a2s_player(ip, port).inspect
     puts 'RULES: ' + ServerQuery::a2s_rules(ip, port).inspect
